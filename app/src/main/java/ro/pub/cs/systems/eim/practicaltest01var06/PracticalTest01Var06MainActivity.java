@@ -31,8 +31,20 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
 
     private String[] values = {"1", "2", "3", "*"};
 
+    IntentFilter intentFilter = new IntentFilter();
 
+    private MessageBroadcastReceiver messageBroadcastReceiver = new MessageBroadcastReceiver();
 
+    private class MessageBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("main", intent.getStringExtra("message"));
+            if(intent.getAction().equals("punctaj")) {
+                String str1 = intent.getStringExtra("message");
+                Toast.makeText(getApplicationContext(), "Victory " + str1, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +97,7 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
 
             }
         });
+        intentFilter.addAction("punctaj");
     }
 
     @Override
@@ -93,6 +106,11 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             score += data.getIntExtra("result", 1);
             Toast.makeText(this, "Score is: " + score, Toast.LENGTH_SHORT).show();
+        }
+        if(score >= 0) {
+            Intent intent1 = new Intent(getApplicationContext(), PracticalTest01Var06Service.class);
+            intent1.putExtra("scoreService", score);
+            getApplicationContext().startService(intent1);
         }
     }
 
@@ -107,6 +125,27 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         int score1 = savedInstanceState.getInt("score");
         Toast.makeText(this, "Score is: " + score1, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intent2 = new Intent(getApplicationContext(), PracticalTest01Var06Service.class);
+        getApplicationContext().stopService(intent2);
+        Toast.makeText(getApplicationContext(), "Service stopped", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d("main", "onResume() method was invoked");
+        super.onResume();
+        registerReceiver(messageBroadcastReceiver, intentFilter);
+    }
+    @Override
+    protected void onPause() {
+        Log.d("main", "onPause() method was invoked");
+        unregisterReceiver(messageBroadcastReceiver);
+        super.onPause();
     }
 
     private String generateNumber() {

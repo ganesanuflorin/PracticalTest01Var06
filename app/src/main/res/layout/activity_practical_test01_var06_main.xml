@@ -7,18 +7,6 @@
     tools:context=".PracticalTest01Var06MainActivity"
     android:orientation="vertical">
 
-    <!--    <EditText-->
-    <!--        android:id="@+id/text"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="48dp"-->
-    <!--        android:layout_alignParentTop="true"-->
-    <!--        android:background="#2A3FB8"-->
-    <!--        android:text="PracticalTest01"-->
-    <!--        android:textAlignment="viewStart"-->
-    <!--        android:textColor="#FFFFFF"-->
-    <!--        android:textSize="24sp"-->
-    <!--        android:textStyle="bold"/>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
